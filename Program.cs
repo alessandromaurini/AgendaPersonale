@@ -16,7 +16,7 @@ namespace AgendaPersonale
             /* FORMATO DELLE ATTIVITA': Data | Titolo | Descrizione
              * Formato di una data: YYYY.MM.DD-HH:mm
              */
-
+            int n = 0;
             bool continua = true;
             while (continua)
             {
@@ -29,6 +29,16 @@ namespace AgendaPersonale
                         Console.WriteLine("DEBUG - visualizzazione di tutte le attività.");
                         // Visualizzazione delle attività inserite, una per riga
                         // non in ordine cronologico, ma per come sono presenti nell'array
+                        if (n == 0)
+                        {
+                            Console.WriteLine("Nessuna attività inserita.");
+                            return;
+                        }
+                        Console.WriteLine("Lista delle attività:");
+                        for (int i = 0; i < n; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {attivita[i]}");
+                        }
                         break;
                     case "2":
                         Console.WriteLine("DEBUG: Inserimento di una nuova attività.");
@@ -36,7 +46,26 @@ namespace AgendaPersonale
                          * Usare il formato richiesto ma richiedere ogni dato separatamente
                          * ATTENZIONE: non cancellare le attività già inserite
                          */
+                        if (n >= attivita.Length)
+                        {
+                            Console.WriteLine("Errore: Capacità massima raggiunta.");
+                            return;
+                        }
+
+                        Console.WriteLine("");
+                        Console.WriteLine("Inserisci la data dell'attività (Formato: YYYY.MM.DD-HH:mm): ");
+                        string data = Console.ReadLine();
+                        Console.WriteLine("Inserisci il titolo dell'attività: ");
+                        string titolo = Console.ReadLine();
+                        Console.WriteLine("Inserisci la descrizione dell'attività: ");
+                        string descrizione = Console.ReadLine();
+
+                        attivita[n] = $"{data} | {titolo} | {descrizione}";
+                        n++;
+
+                        Console.WriteLine("Attività inserita con successo.");
                         break;
+                        
                     case "3":
                         Console.WriteLine("DEBUG: Modifica di un'attività.");
                         // Modifica di un'attività, identificata tramite la sua posizione nell'array (l'utente la conosce perché la visualizzazione viene effettuata al punto 1)
