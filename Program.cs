@@ -16,7 +16,7 @@ namespace AgendaPersonale
             /* FORMATO DELLE ATTIVITA': Data | Titolo | Descrizione
              * Formato di una data: YYYY.MM.DD-HH:mm
              */
-            int n = 0;
+
             bool continua = true;
             while (continua)
             {
@@ -26,49 +26,48 @@ namespace AgendaPersonale
                 switch (scelta)
                 {
                     case "1":
-                        Console.WriteLine("DEBUG - visualizzazione di tutte le attività.");
                         // Visualizzazione delle attività inserite, una per riga
                         // non in ordine cronologico, ma per come sono presenti nell'array
-                        if (n == 0)
-                        {
-                            Console.WriteLine("Nessuna attività inserita.");
-                            return;
-                        }
-                        Console.WriteLine("Lista delle attività:");
-                        for (int i = 0; i < n; i++)
-                        {
-                            Console.WriteLine($"{i + 1}. {attivita[i]}");
-                        }
+                        visualizza(attivita);
                         break;
                     case "2":
-                        Console.WriteLine("DEBUG: Inserimento di una nuova attività.");
                         /* INSERIMENTO DI UNA NUOVA ATTIVITA' in coda all'array
                          * Usare il formato richiesto ma richiedere ogni dato separatamente
-                         * ATTENZIONE: non cancellare le attività già inserite
-                         */
-                        if (n >= attivita.Length)
-                        {
-                            Console.WriteLine("Errore: Capacità massima raggiunta.");
-                            return;
-                        }
-
-                        Console.WriteLine("");
-                        Console.WriteLine("Inserisci la data dell'attività (Formato: YYYY.MM.DD-HH:mm): ");
-                        string data = Console.ReadLine();
-                        Console.WriteLine("Inserisci il titolo dell'attività: ");
+                         * ATTENZIONE: non cancellare le attività già inserite */
+                        Console.Write("Inserire il titolo dell'attività: ");
                         string titolo = Console.ReadLine();
-                        Console.WriteLine("Inserisci la descrizione dell'attività: ");
+                        Console.Write("Inserire la descrizione dell'attività: ");
                         string descrizione = Console.ReadLine();
+                        Console.Write("Inserire l'anno dell'attività: ");
+                        int anno = int.Parse(Console.ReadLine());
+                        Console.Write("Inserire il mese dell'attività: ");
+                        int mese = int.Parse(Console.ReadLine()); // DA FARE: non andare avanti fino a che il mese non è corretto
+                        Console.Write("Inserire il giorno dell'attività: ");
+                        int giorno = int.Parse(Console.ReadLine()); // DA FARE: non andare avanti fino a che il giorno non è corretto
+                        Console.Write("Inserire l'ora dell'attività: ");
+                        int ora = int.Parse(Console.ReadLine());
+                        Console.Write("Inserire i minuti dell'attività: ");
+                        int minuti = int.Parse(Console.ReadLine());
 
-                        attivita[n] = $"{data} | {titolo} | {descrizione}";
-                        n++;
-
-                        Console.WriteLine("Attività inserita con successo.");
-                        break;
+                        // DA FARE: il mese deve essere preceduto da 0 se è ad una sola cifra
+                        // (es.: febbraio deve essere stampato come "02", non "2")
+                        // altrimenti l'ordinamento per ordine alfabetico non funziona
+                        string stringaData = anno + "." + mese + "." + giorno + "-" + ora + ":" + minuti;
+                        string nuovaAttivita = stringaData + " | " + titolo + " | " + descrizione;
                         
+                        bool inserimentoRiuscito = inserisci(attivita, nuovaAttivita);
+                        if (inserimentoRiuscito)
+                        {
+                            Console.WriteLine("Attività inserita con successo");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Attività non inserita (si è già raggiunto il massimo numero di attività memorizzabili).");
+                        }
+                        break;
                     case "3":
-                        Console.WriteLine("DEBUG: Modifica di un'attività.");
-                        // Modifica di un'attività, identificata tramite la sua posizione nell'array (l'utente la conosce perché la visualizzazione viene effettuata al punto 1)
+                        Console.WriteLine("DEBUG: Ordinemanto delle attività.");
+                        // Ordinamento delle attività per data (che vuol dire, per come è stata memorizzata la data, in ordine alfabetico)
                         break;
                     case "4":
                         Console.WriteLine("DEBUG: Eliminazione di un'attività.");
@@ -91,11 +90,39 @@ namespace AgendaPersonale
             Console.WriteLine("---------------------------");
             Console.WriteLine("1 - Visualizza le attività");
             Console.WriteLine("2 - Inserisci attività");
-            Console.WriteLine("3 - Modifica attività");
+            Console.WriteLine("3 - Ordina attività per data");
             Console.WriteLine("4 - Elimina attività");
             Console.WriteLine("0 - ESCI");
         }
 
-        
+        static void visualizza(string[] array)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] != null)
+                {
+                    Console.WriteLine(array[i]);
+                }
+            }
+        }
+
+        // Inserisce un valore nell'array e restituisce TRUE se l'inserimento è andato a buon fine.
+        // Se viene restituito FALSE, o elem è null oppure l'array è già pieno.
+        static bool inserisci(string[] array, string elem)
+        {
+            if (elem != null)
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    if (array[i] == null)
+                    {
+                        // inserisco l'elemento
+                        array[i] = elem;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }
