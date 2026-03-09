@@ -157,26 +157,31 @@ namespace AgendaPersonale
             return false;
         }
 
-        // Errore perche gli array sono delle stringhe e non puo confrontarle con i segni maggiore/minore
-        /*
+        // https://learn.microsoft.com/en-us/dotnet/api/system.string.compare?view=net-7.0
         static void ordina(string[] array)
         {
-            for (int i = 0; i < array.Length - 1; i++)
+            for (int i = 0; i < array.Length; i++) // indice iterazione A (nero)
             {
-                for (int j = i + 1; j < array.Length; j++)
+                int minindex = i; // indice del minimo corrente (giallo)
+                for (int j = i + 1; i < array.Length; i++) // indice iterazione b (blu)
                 {
-                    if (array[i] != null && array[j] != null)
+                    // confronto l'elemento corrente (blu), con il valore minimo corrente
+                    // se e minore, diventa il nuovo minimo
+                    if (String.Compare(array[minindex], array[j]) > 0)
                     {
-                        if (array[i] > array[j])
-                        {
-                            string temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
-                        }
+                        minindex = j;
                     }
                 }
+                // all'indice i ho il valore che deve diventaare il minimo (tramite scambio)
+                // all'indice minindex ho il valore minimo
+                if (i != minindex)
+                {
+                    string memoria = array[i];
+                    array[i] = array[minindex];
+                    array[minindex] = memoria;
+                }
             }
+
         }
-        */
     }
 }
